@@ -3,6 +3,8 @@ dados <- read.csv(file = "C:/Users/HOME/Downloads/day.csv") # Pegar os dados
 View(dados)
 glimpse(dados) # Olhar os dados
 
+#TRATAMENTO DE DADOS
+
 dados$date <- as.Date(dados$dteday, format = "%Y-%m-%d") #Formatar texto pra data
 
 glimpse(dados)
@@ -17,7 +19,14 @@ glimpse(novos_dados)
 View(novos_dados)
 
 install.packages("dataMeta")
+
+novos_dados$temp <- round(novos_dados$temp * 100)
+novos_dados$atemp <- round(novos_dados$atemp * 100)
+novos_dados$hum <- round(novos_dados$hum * 100)
+novos_dados$windspeed <- round(novos_dados$windspeed * 100) # Arredondar e formatar
+                                                            # os números
 #------------------------------------------------
+#FAZENDO O DICIONÁRIO DE DADOS
 desc <- c("O Índicie", "Dia", "Temporada (1-Primavera, 2-Verão, 3-Outono, 4-Inverno)", 
           "Ano (0-2011, 1-2012)", "Mês", "Se teve feriado ou não", 
           "Dia da semana", "Dia Normal", "Situação que se encontra o clima",
