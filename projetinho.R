@@ -44,11 +44,20 @@ dict <- build_dict(my.data = novos_dados, linker = linker, option_description = 
 
 dict
 
-class(novos_dados$yr)
+# class(novos_dados$yr)
+#------------------------------------------------
 
+install.packages("tidyverse")
+install.packages("forecast")
 
+dias <- novos_dados %>% 
+  group_by(date) %>% 
+  summarise(usuarios_totais = sum(casual + registered)) # Agrupar por data, 
+                                                        # somar usuarios
+ts_dados <- ts(dias$usuarios_totais, start = c(year(min(dias$date)), 
+                                               month(min(dias$date))), frequency = 365)
 
-
+decom <- decompose(ts_dados, type = "multiplicative")
 
 
 
