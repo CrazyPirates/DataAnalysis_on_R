@@ -45,6 +45,7 @@ dict <- build_dict(my.data = novos_dados, linker = linker, option_description = 
 dict
 
 # class(novos_dados$yr)
+
 #------------------------------------------------
 
 install.packages("tidyverse")
@@ -54,13 +55,35 @@ dias <- novos_dados %>%
   group_by(date) %>% 
   summarise(usuarios_totais = sum(casual + registered)) # Agrupar por data, 
                                                         # somar usuarios
+
 ts_dados <- ts(dias$usuarios_totais, start = c(year(min(dias$date)), 
-                                               month(min(dias$date))), frequency = 365)
+                                               month(min(dias$date))), frequency = 365) # Criar uma time series
 
-decom <- decompose(ts_dados, type = "multiplicative")
+decom <- decompose(ts_dados, type = "multiplicative") # Decomposiçao da time series
+plot(decom)
 
+plot(ts_dados, main = "Total de Usuários ao Longo do Tempo", 
+     ylab = "Usuários",
+     xlab = "Tempo") # Plotagem
 
+#------------------------------------------------
 
+head(novos_dados$holiday)
+
+feriados <- novos_dados %>% 
+  group_by(holiday) %>% 
+  summarise(media_usuarios = mean(casual + registered)) # Agrupar e Somar
+
+print(feriados)
+
+ggplot(novos_dados, aes(x = as.factor(holiday), y = casual + registered)) +
+  geom_boxplot() +
+  labs(x = "Feriado", y = "Usuários", title = "Impacto dos Feriados") +
+  scale_x_discrete(labels = c("Sem feriado", "Com feriado")) # Visualizar dados
+
+teste <- t.test(casual + registered ~ holiday, data = novos_dados) # Teste de Hipoteses
+
+print(teste)
 
 
 
