@@ -20,6 +20,9 @@ View(novos_dados)
 
 install.packages("dataMeta")
 
+print(sum(novos_dados$casual)) # 620.017
+print(sum(novos_dados$registered)) # 2.672.662
+
 novos_dados$temp <- round(novos_dados$temp * 100)
 novos_dados$atemp <- round(novos_dados$atemp * 100)
 novos_dados$hum <- round(novos_dados$hum * 100)
@@ -84,6 +87,54 @@ ggplot(novos_dados, aes(x = as.factor(holiday), y = casual + registered)) +
 teste <- t.test(casual + registered ~ holiday, data = novos_dados) # Teste de Hipoteses
 
 print(teste)
+
+casual <- novos_dados %>% 
+  summarise(media_casual = mean(casual),
+            mediana_casual = median(casual),
+            sd_casual = sd(casual),
+            min_casual = min(casual),
+            max_casual = min(casual))
+
+registered <- novos_dados %>% 
+  summarise(media_registered = mean(registered),
+            mediana_registered = median(registered),
+            sd_registered = sd(registered),
+            min_registered = min(registered),
+            max_registered = min(registered))
+
+print(casual)
+print(registered)
+
+novos_dados_long <- novos_dados %>% 
+  gather(key = "user_type", value = "count", casual, registered)
+
+ggplot(novos_dados_long, aes(x = user_type, y = count)) +
+  geom_boxplot() +
+  labs(x = "Tipo de Usuário", y = "Número de Usuários", title = "Comparação de
+       Usuários")
+
+t_teste <- t.test(novos_dados$casual, novos_dados$registered)
+
+print(t_teste)
+#------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
